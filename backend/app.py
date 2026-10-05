@@ -10,6 +10,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 from backend.routes.assessment_routes import assessment_bp
+from backend.routes.checklist_routes import checklist_bp
 from backend.routes.dashboard_routes import dashboard_bp
 from backend.routes.questionnaire_routes import questionnaire_bp
 from backend.utils.database import initialize_database
@@ -151,6 +152,10 @@ def create_app():
 
     app.register_blueprint(
         dashboard_bp
+    )
+
+    app.register_blueprint(
+        checklist_bp
     )
 
     return app
