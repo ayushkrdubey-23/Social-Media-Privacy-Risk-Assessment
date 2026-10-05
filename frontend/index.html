@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Social Media Privacy Risk Assessment Framework - privacy awareness and educational risk assessment."
+    >
+
+    <meta
+        name="robots"
+        content="noindex, nofollow"
+    >
+
+    <title>
+        Social Media Privacy Risk Assessment Framework
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="./css/style.css"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
+        defer
+    ></script>
+
+    <script
+        src="./js/app.js"
+        defer
+    ></script>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="brand">
+                <div class="brand-mark">SP</div>
+
+                <div>
+                    <p class="brand-kicker">
+                        Defensive Cybersecurity
+                    </p>
+
+                    <h1 class="brand-title">
+                        Social Media Privacy
+                    </h1>
+                </div>
+            </div>
+
+            <nav class="main-nav" aria-label="Primary navigation">
+                <a href="#overview">Overview</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#privacy">Privacy</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section
+            id="overview"
+            class="hero-section"
+        >
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <span class="status-badge">
+                        <span
+                            id="api-status-dot"
+                            class="status-dot"
+                        ></span>
+
+                        <span id="api-status-text">
+                            Checking API...
+                        </span>
+                    </span>
+
+                    <p class="eyebrow">
+                        Privacy Awareness Framework
+                    </p>
+
+                    <h2>
+                        Understand your social media
+                        privacy exposure.
+                    </h2>
+
+                    <p class="hero-description">
+                        A defensive, educational assessment platform
+                        that evaluates privacy habits using
+                        self-reported questionnaire responses.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a
+                            class="button button-primary"
+                            href="#dashboard"
+                        >
+                            View dashboard
+                        </a>
+
+                        <a
+                            class="button button-secondary"
+                            href="#privacy"
+                        >
+                            Privacy principles
+                        </a>
+                    </div>
+
+                    <p class="hero-note">
+                        No social-media scraping, account access,
+                        tracking, or direct personal-data collection.
+                    </p>
+                </div>
+
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <span>Assessment model</span>
+                        <span class="mini-badge">
+                            0–100
+                        </span>
+                    </div>
+
+                    <div class="risk-scale">
+                        <div class="risk-scale-item">
+                            <span>LOW</span>
+                            <strong>0–20</strong>
+                        </div>
+
+                        <div class="risk-scale-item">
+                            <span>MODERATE</span>
+                            <strong>21–40</strong>
+                        </div>
+
+                        <div class="risk-scale-item">
+                            <span>HIGH</span>
+                            <strong>41–70</strong>
+                        </div>
+
+                        <div class="risk-scale-item">
+                            <span>CRITICAL</span>
+                            <strong>71–100</strong>
+                        </div>
+                    </div>
+
+                    <div class="hero-card-footer">
+                        <span>10 privacy categories</span>
+                        <span>50 questions</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="dashboard"
+            class="dashboard-section"
+        >
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            Aggregate analytics
+                        </p>
+
+                        <h2>
+                            Privacy Risk Dashboard
+                        </h2>
+
+                        <p>
+                            Statistics are calculated from derived
+                            assessment records stored locally in
+                            SQLite.
+                        </p>
+                    </div>
+
+                    <button
+                        id="refresh-dashboard"
+                        class="button button-secondary"
+                        type="button"
+                    >
+                        Refresh data
+                    </button>
+                </div>
+
+                <div
+                    id="dashboard-message"
+                    class="dashboard-message"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Loading dashboard statistics...
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">
+                            Assessments
+                        </p>
+
+                        <p
+                            id="total-assessments"
+                            class="stat-value"
+                        >
+                            —
+                        </p>
+
+                        <p class="stat-description">
+                            Completed assessments
+                        </p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">
+                            Average score
+                        </p>
+
+                        <p
+                            id="average-score"
+                            class="stat-value"
+                        >
+                            —
+                        </p>
+
+                        <p class="stat-description">
+                            Aggregate exposure score
+                        </p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">
+                            Findings
+                        </p>
+
+                        <p
+                            id="total-findings"
+                            class="stat-value"
+                        >
+                            —
+                        </p>
+
+                        <p class="stat-description">
+                            Derived privacy findings
+                        </p>
+                    </article>
+
+                    <article class="stat-card">
+                        <p class="stat-label">
+                            Categories
+                        </p>
+
+                        <p
+                            id="category-count"
+                            class="stat-value"
+                        >
+                            —
+                        </p>
+
+                        <p class="stat-description">
+                            Privacy-risk categories
+                        </p>
+                    </article>
+                </div>
+
+                <div class="charts-grid">
+                    <article class="chart-card">
+                        <div class="chart-card-header">
+                            <div>
+                                <p class="chart-kicker">
+                                    Risk distribution
+                                </p>
+
+                                <h3>
+                                    Assessment risk levels
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="chart-wrapper chart-wrapper-doughnut">
+                            <canvas
+                                id="risk-distribution-chart"
+                                aria-label="Risk level distribution chart"
+                            ></canvas>
+                        </div>
+                    </article>
+
+                    <article class="chart-card">
+                        <div class="chart-card-header">
+                            <div>
+                                <p class="chart-kicker">
+                                    Category exposure
+                                </p>
+
+                                <h3>
+                                    Average category scores
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas
+                                id="category-score-chart"
+                                aria-label="Average category score chart"
+                            ></canvas>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="category-table-card">
+                    <div class="chart-card-header">
+                        <div>
+                            <p class="chart-kicker">
+                                Category overview
+                            </p>
+
+                            <h3>
+                                Privacy category performance
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Category
+                                    </th>
+
+                                    <th scope="col">
+                                        Average score
+                                    </th>
+
+                                    <th scope="col">
+                                        Exposure
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="category-table-body">
+                                <tr>
+                                    <td colspan="3">
+                                        Loading...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="privacy"
+            class="privacy-section"
+        >
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            Privacy by design
+                        </p>
+
+                        <h2>
+                            Built for awareness, not surveillance.
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="privacy-grid">
+                    <article class="privacy-card">
+                        <div class="privacy-icon">
+                            01
+                        </div>
+
+                        <h3>
+                            Self-reported
+                        </h3>
+
+                        <p>
+                            Assessments use voluntary questionnaire
+                            responses rather than account inspection.
+                        </p>
+                    </article>
+
+                    <article class="privacy-card">
+                        <div class="privacy-icon">
+                            02
+                        </div>
+
+                        <h3>
+                            Synthetic data
+                        </h3>
+
+                        <p>
+                            Development analytics use fictional
+                            synthetic assessment records.
+                        </p>
+                    </article>
+
+                    <article class="privacy-card">
+                        <div class="privacy-icon">
+                            03
+                        </div>
+
+                        <h3>
+                            Minimal storage
+                        </h3>
+
+                        <p>
+                            Derived scores, findings, and timestamps
+                            are stored without raw questionnaire
+                            responses.
+                        </p>
+                    </article>
+
+                    <article class="privacy-card">
+                        <div class="privacy-icon">
+                            04
+                        </div>
+
+                        <h3>
+                            Defensive scope
+                        </h3>
+
+                        <p>
+                            The framework does not scrape, track,
+                            enumerate, or access private accounts.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>
+                        Educational disclaimer
+                    </strong>
+
+                    <p>
+                        Risk scores, weights, and thresholds are
+                        educational assumptions. They should not be
+                        treated as professional security guarantees or
+                        as definitive predictions of privacy harm.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p>
+                Social Media Privacy Risk Assessment Framework
+            </p>
+
+            <p>
+                Defensive cybersecurity • Privacy awareness
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
