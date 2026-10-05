@@ -1,11 +1,12 @@
 """
-Flask routes for privacy assessment submission and retrieval.
+Flask routes for privacy assessment submission, retrieval,
+recommendations, and deletion.
 
 The API accepts self-reported questionnaire responses and returns
 derived privacy-risk information.
 
-Raw questionnaire responses are not persisted by this route and are
-not included in the successful response payload.
+Raw questionnaire responses are not persisted by these routes and
+are not included in successful response payloads.
 """
 
 from __future__ import annotations
@@ -13,7 +14,9 @@ from __future__ import annotations
 from flask import Blueprint, jsonify, request
 
 from backend.services.assessment_repository import (
+    delete_assessment,
     get_assessment,
+    get_assessment_recommendations,
     save_assessment,
 )
 from backend.services.assessment_service import (
@@ -157,8 +160,118 @@ def create_assessment():
     ), 201
 
 
+@assessment_bp.get("/<assessment_id>/recommendations")
+def retrieve_assessment_recommendations(
+    assessment_id: str,
+):
+    """
+    Retrieve recommendations for one saved assessment.
+    """
+    try:
+        recommendations = get_assessment_recommendations(
+            assessment_id
+        )
+
+    except ValueError as exc:
+        return jsonify(
+            {
+                "success": False,
+                "error": {
+                    "code": "INVALID_ASSESSMENT_ID",
+                    "message": str(exc),
+                },
+            }
+        ), 400
+
+    if recommendations is None:
+        return jsonify(
+            {
+                "success": False,
+                "error": {
+                    "code": "ASSESSMENT_NOT_FOUND",
+                    "message": (
+                        f"Assessment '{assessment_id}' "
+                        "was not found."
+                    ),
+                },
+            }
+        ), 404
+
+    return jsonify(
+        {
+            "success": True,
+            "assessment_id": recommendations[
+                "assessment_id"
+            ],
+            "recommendation_count": recommendations[
+                "recommendation_count"
+            ],
+            "recommendations": recommendations[
+                "recommendations"
+            ],
+            "privacy_note": recommendations[
+                "privacy_note"
+            ],
+        }
+    ), 200
+
+
+@assessment_bp.delete("/<assessment_id>")
+def remove_assessment(
+    assessment_id: str,
+):
+    """
+    Permanently delete a saved assessment and its derived records.
+    """
+    try:
+        deleted = delete_assessment(
+            assessment_id
+        )
+
+    except ValueError as exc:
+        return jsonify(
+            {
+                "success": False,
+                "error": {
+                    "code": "INVALID_ASSESSMENT_ID",
+                    "message": str(exc),
+                },
+            }
+        ), 400
+
+    if not deleted:
+        return jsonify(
+            {
+                "success": False,
+                "error": {
+                    "code": "ASSESSMENT_NOT_FOUND",
+                    "message": (
+                        f"Assessment '{assessment_id}' "
+                        "was not found."
+                    ),
+                },
+            }
+        ), 404
+
+    return jsonify(
+        {
+            "success": True,
+            "message": "Assessment deleted successfully.",
+            "assessment_id": str(
+                assessment_id
+            ).strip(),
+            "privacy_note": (
+                "Associated category scores and findings were "
+                "deleted with the assessment."
+            ),
+        }
+    ), 200
+
+
 @assessment_bp.get("/<assessment_id>")
-def retrieve_assessment(assessment_id: str):
+def retrieve_assessment(
+    assessment_id: str,
+):
     """
     Retrieve one persisted assessment by its generated ID.
 

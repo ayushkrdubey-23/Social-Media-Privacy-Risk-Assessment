@@ -12,8 +12,6 @@ The repository deliberately does NOT save:
 - exact locations,
 - private messages,
 - raw questionnaire responses.
-
-Raw responses remain in memory during assessment processing only.
 """
 
 from __future__ import annotations
@@ -474,6 +472,144 @@ def get_assessment(
             "privacy_note": (
                 "Raw questionnaire responses and direct personal "
                 "identifiers are not stored."
+            ),
+        }
+
+    finally:
+        connection.close()
+
+
+def get_assessment_recommendations(
+    assessment_id: str,
+) -> dict[str, Any] | None:
+    """
+    Retrieve recommendations associated with an assessment.
+
+    Recommendations are resolved from the reusable recommendation catalog
+    using the finding types persisted for that assessment.
+    """
+    normalized_id = str(
+        assessment_id
+    ).strip()
+
+    if not normalized_id:
+        raise ValueError(
+            "assessment_id cannot be empty."
+        )
+
+    initialize_database()
+
+    connection = get_db_connection()
+
+    try:
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            SELECT
+                assessment_id
+            FROM assessments
+            WHERE assessment_id = ?
+            """,
+            (normalized_id,),
+        )
+
+        assessment_row = cursor.fetchone()
+
+        if assessment_row is None:
+            return None
+
+        cursor.execute(
+            """
+            SELECT
+                f.category,
+                f.finding_type,
+                f.severity,
+                f.description,
+                r.recommendation,
+                r.priority
+            FROM findings AS f
+            LEFT JOIN recommendations AS r
+                ON r.finding_type = f.finding_type
+            WHERE f.assessment_id = ?
+            ORDER BY
+                CASE r.priority
+                    WHEN 'IMMEDIATE' THEN 3
+                    WHEN 'IMPORTANT' THEN 2
+                    WHEN 'GOOD PRACTICE' THEN 1
+                    ELSE 0
+                END DESC,
+                CASE f.severity
+                    WHEN 'CRITICAL' THEN 4
+                    WHEN 'HIGH' THEN 3
+                    WHEN 'MEDIUM' THEN 2
+                    WHEN 'LOW' THEN 1
+                    ELSE 0
+                END DESC,
+                f.finding_id ASC
+            """,
+            (normalized_id,),
+        )
+
+        rows = cursor.fetchall()
+
+        recommendations = []
+
+        seen_finding_types = set()
+
+        for row in rows:
+            finding_type = row["finding_type"]
+
+            if finding_type in seen_finding_types:
+                continue
+
+            seen_finding_types.add(
+                finding_type
+            )
+
+            recommendation = row["recommendation"]
+            priority = row["priority"]
+
+            if not recommendation:
+                definition = RECOMMENDATION_MAP.get(
+                    finding_type
+                )
+
+                if definition:
+                    recommendation = (
+                        definition["recommendation"]
+                    )
+                    priority = definition["priority"]
+
+            if not recommendation:
+                continue
+
+            recommendations.append(
+                {
+                    "category": row["category"],
+                    "finding_type": finding_type,
+                    "severity": row["severity"],
+                    "priority": priority,
+                    "recommendation": recommendation,
+                    "action": (
+                        RECOMMENDATION_MAP.get(
+                            finding_type,
+                            {},
+                        ).get("action")
+                    ),
+                    "educational_only": True,
+                }
+            )
+
+        return {
+            "assessment_id": normalized_id,
+            "recommendation_count": len(
+                recommendations
+            ),
+            "recommendations": recommendations,
+            "privacy_note": (
+                "Recommendations are derived from stored finding "
+                "types and do not require raw questionnaire responses."
             ),
         }
 
