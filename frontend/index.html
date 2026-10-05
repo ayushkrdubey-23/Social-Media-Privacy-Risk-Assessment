@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -35,6 +36,11 @@
         src="./js/app.js"
         defer
     ></script>
+
+    <script
+        src="./js/assessment.js"
+        defer
+    ></script>
 </head>
 
 <body>
@@ -54,15 +60,33 @@
                 </div>
             </div>
 
-            <nav class="main-nav" aria-label="Primary navigation">
-                <a href="#overview">Overview</a>
-                <a href="#dashboard">Dashboard</a>
-                <a href="#privacy">Privacy</a>
+            <nav
+                class="main-nav"
+                aria-label="Primary navigation"
+            >
+                <a href="#overview">
+                    Overview
+                </a>
+
+                <a href="#assessment">
+                    Assessment
+                </a>
+
+                <a href="#dashboard">
+                    Dashboard
+                </a>
+
+                <a href="#privacy">
+                    Privacy
+                </a>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
         <section
             id="overview"
             class="hero-section"
@@ -98,16 +122,16 @@
                     <div class="hero-actions">
                         <a
                             class="button button-primary"
-                            href="#dashboard"
+                            href="#assessment"
                         >
-                            View dashboard
+                            Start assessment
                         </a>
 
                         <a
                             class="button button-secondary"
-                            href="#privacy"
+                            href="#dashboard"
                         >
-                            Privacy principles
+                            View dashboard
                         </a>
                     </div>
 
@@ -119,7 +143,10 @@
 
                 <div class="hero-card">
                     <div class="hero-card-header">
-                        <span>Assessment model</span>
+                        <span>
+                            Assessment model
+                        </span>
+
                         <span class="mini-badge">
                             0–100
                         </span>
@@ -127,34 +154,389 @@
 
                     <div class="risk-scale">
                         <div class="risk-scale-item">
-                            <span>LOW</span>
-                            <strong>0–20</strong>
+                            <span>
+                                LOW
+                            </span>
+
+                            <strong>
+                                0–20
+                            </strong>
                         </div>
 
                         <div class="risk-scale-item">
-                            <span>MODERATE</span>
-                            <strong>21–40</strong>
+                            <span>
+                                MODERATE
+                            </span>
+
+                            <strong>
+                                21–40
+                            </strong>
                         </div>
 
                         <div class="risk-scale-item">
-                            <span>HIGH</span>
-                            <strong>41–70</strong>
+                            <span>
+                                HIGH
+                            </span>
+
+                            <strong>
+                                41–70
+                            </strong>
                         </div>
 
                         <div class="risk-scale-item">
-                            <span>CRITICAL</span>
-                            <strong>71–100</strong>
+                            <span>
+                                CRITICAL
+                            </span>
+
+                            <strong>
+                                71–100
+                            </strong>
                         </div>
                     </div>
 
                     <div class="hero-card-footer">
-                        <span>10 privacy categories</span>
-                        <span>50 questions</span>
+                        <span>
+                            10 privacy categories
+                        </span>
+
+                        <span>
+                            50 questions
+                        </span>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- =====================================================
+             ASSESSMENT
+        ====================================================== -->
+        <section
+            id="assessment"
+            class="assessment-section"
+        >
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            Self-assessment
+                        </p>
+
+                        <h2>
+                            Privacy Risk Assessment
+                        </h2>
+
+                        <p>
+                            Answer all 50 questions based on your
+                            current privacy habits. Do not enter
+                            passwords, contact details, exact
+                            locations, or private messages.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="assessment-layout">
+                    <aside class="assessment-sidebar">
+                        <div class="assessment-progress-card">
+                            <p class="assessment-sidebar-label">
+                                Progress
+                            </p>
+
+                            <div class="progress-heading">
+                                <strong
+                                    id="assessment-progress-count"
+                                >
+                                    0 / 50
+                                </strong>
+
+                                <span
+                                    id="assessment-progress-percent"
+                                >
+                                    0%
+                                </span>
+                            </div>
+
+                            <div
+                                class="progress-track"
+                                aria-hidden="true"
+                            >
+                                <div
+                                    id="assessment-progress-bar"
+                                    class="progress-bar"
+                                    style="width: 0%;"
+                                ></div>
+                            </div>
+
+                            <p
+                                id="assessment-progress-message"
+                                class="assessment-progress-message"
+                            >
+                                Loading questionnaire...
+                            </p>
+                        </div>
+
+                        <div
+                            id="category-navigation"
+                            class="category-navigation"
+                        >
+                        </div>
+
+                        <div class="assessment-safety-note">
+                            <strong>
+                                Privacy-first
+                            </strong>
+
+                            <p>
+                                This assessment uses only
+                                self-reported settings and habits.
+                                It does not inspect your social
+                                media account.
+                            </p>
+                        </div>
+                    </aside>
+
+                    <div class="assessment-main">
+                        <div
+                            id="assessment-error"
+                            class="assessment-message error"
+                            role="alert"
+                            hidden
+                        ></div>
+
+                        <div
+                            id="assessment-loading"
+                            class="assessment-loading"
+                        >
+                            <div class="loading-spinner"></div>
+
+                            <p>
+                                Loading your privacy assessment...
+                            </p>
+                        </div>
+
+                        <form
+                            id="assessment-form"
+                            class="assessment-form"
+                            novalidate
+                            hidden
+                        >
+                            <div
+                                id="questionnaire-container"
+                                class="questionnaire-container"
+                            ></div>
+
+                            <div class="assessment-submit-card">
+                                <div>
+                                    <p class="submit-card-title">
+                                        Ready to calculate your
+                                        privacy risk?
+                                    </p>
+
+                                    <p class="submit-card-text">
+                                        Your answers are processed
+                                        locally through the
+                                        assessment API and only
+                                        derived risk data is
+                                        persisted.
+                                    </p>
+                                </div>
+
+                                <button
+                                    id="submit-assessment"
+                                    class="button button-primary"
+                                    type="submit"
+                                >
+                                    Calculate privacy risk
+                                </button>
+                            </div>
+                        </form>
+
+                        <section
+                            id="assessment-result"
+                            class="assessment-result"
+                            hidden
+                        >
+                            <div class="result-header">
+                                <div>
+                                    <p class="eyebrow">
+                                        Assessment result
+                                    </p>
+
+                                    <h3>
+                                        Your privacy risk summary
+                                    </h3>
+                                </div>
+
+                                <button
+                                    id="retake-assessment"
+                                    class="button button-secondary"
+                                    type="button"
+                                >
+                                    Retake assessment
+                                </button>
+                            </div>
+
+                            <div class="result-score-grid">
+                                <div class="result-score-card">
+                                    <span class="result-label">
+                                        Overall score
+                                    </span>
+
+                                    <strong
+                                        id="result-score"
+                                        class="result-score"
+                                    >
+                                        —
+                                    </strong>
+
+                                    <span class="result-scale">
+                                        0–100
+                                    </span>
+                                </div>
+
+                                <div class="result-level-card">
+                                    <span class="result-label">
+                                        Risk level
+                                    </span>
+
+                                    <strong
+                                        id="result-risk-level"
+                                        class="result-risk-level"
+                                    >
+                                        —
+                                    </strong>
+
+                                    <p
+                                        id="result-risk-description"
+                                    >
+                                    </p>
+                                </div>
+
+                                <div class="result-score-card">
+                                    <span class="result-label">
+                                        Findings
+                                    </span>
+
+                                    <strong
+                                        id="result-finding-count"
+                                        class="result-score"
+                                    >
+                                        —
+                                    </strong>
+
+                                    <span class="result-scale">
+                                        Identified areas
+                                    </span>
+                                </div>
+
+                                <div class="result-score-card">
+                                    <span class="result-label">
+                                        Recommendations
+                                    </span>
+
+                                    <strong
+                                        id="result-recommendation-count"
+                                        class="result-score"
+                                    >
+                                        —
+                                    </strong>
+
+                                    <span class="result-scale">
+                                        Action items
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="result-section">
+                                <div class="result-section-heading">
+                                    <div>
+                                        <p class="chart-kicker">
+                                            Category exposure
+                                        </p>
+
+                                        <h4>
+                                            Privacy category scores
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                <div
+                                    id="result-category-grid"
+                                    class="result-category-grid"
+                                ></div>
+                            </div>
+
+                            <div class="result-two-column">
+                                <div class="result-section">
+                                    <div class="result-section-heading">
+                                        <div>
+                                            <p class="chart-kicker">
+                                                Findings
+                                            </p>
+
+                                            <h4>
+                                                Areas requiring attention
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        id="result-findings"
+                                        class="result-list"
+                                    ></div>
+                                </div>
+
+                                <div class="result-section">
+                                    <div class="result-section-heading">
+                                        <div>
+                                            <p class="chart-kicker">
+                                                Recommendations
+                                            </p>
+
+                                            <h4>
+                                                Suggested actions
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        id="result-recommendations"
+                                        class="result-list"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div class="result-footer-note">
+                                <strong>
+                                    Educational result
+                                </strong>
+
+                                <p>
+                                    This score is an educational
+                                    estimate based on self-reported
+                                    responses, configured weights,
+                                    and thresholds. It is not a
+                                    professional security
+                                    certification or guarantee.
+                                </p>
+
+                                <p>
+                                    Assessment ID:
+                                    <span
+                                        id="result-assessment-id"
+                                    >
+                                        —
+                                    </span>
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             DASHBOARD
+        ====================================================== -->
         <section
             id="dashboard"
             class="dashboard-section"
@@ -353,6 +735,9 @@
             </div>
         </section>
 
+        <!-- =====================================================
+             PRIVACY
+        ====================================================== -->
         <section
             id="privacy"
             class="privacy-section"
@@ -441,8 +826,8 @@
                     <p>
                         Risk scores, weights, and thresholds are
                         educational assumptions. They should not be
-                        treated as professional security guarantees or
-                        as definitive predictions of privacy harm.
+                        treated as professional security guarantees
+                        or definitive predictions of privacy harm.
                     </p>
                 </div>
             </div>
