@@ -10,6 +10,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 from backend.routes.assessment_routes import assessment_bp
+from backend.routes.dashboard_routes import dashboard_bp
 from backend.routes.questionnaire_routes import questionnaire_bp
 from backend.utils.database import initialize_database
 
@@ -148,6 +149,10 @@ def create_app():
         assessment_bp
     )
 
+    app.register_blueprint(
+        dashboard_bp
+    )
+
     return app
 
 
@@ -156,6 +161,7 @@ app = create_app()
 
 if __name__ == "__main__":
     host = "127.0.0.1"
+
     port = int(
         os.getenv(
             "PORT",
